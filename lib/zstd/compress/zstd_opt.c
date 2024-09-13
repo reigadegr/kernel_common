@@ -9,18 +9,6 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
-/*
- * Disable inlining for the optimal parser for the kernel build.
- * It is unlikely to be used in the kernel, and where it is used
- * latency shouldn't matter because it is very slow to begin with.
- * We prefer a ~180KB binary size win over faster optimal parsing.
- *
- * TODO(https://github.com/facebook/zstd/issues/2862):
- * Improve the code size of the optimal parser in general, so we
- * don't need this hack for the kernel build.
- */
-#define ZSTD_NO_INLINE 1
-
 #include "zstd_compress_internal.h"
 #include "hist.h"
 #include "zstd_opt.h"
@@ -677,13 +665,13 @@ ZSTD_insertBtAndGetAllMatches (
                 assert(curr >= windowLow);
                 if ( dictMode == ZSTD_extDict
                   && ( ((repOffset-1) /*intentional overflow*/ < curr - windowLow)  /* equivalent to `curr > repIndex >= windowLow` */
-                     & (((U32)((dictLimit-1) - repIndex) >= 3) ) /* intentional overflow : do not test positions overlapping 2 memory segments */)
+                     & (ZSTD_index_overlap_check(dictLimit, repIndex)) )
                   && (ZSTD_readMINMATCH(ip, minMatch) == ZSTD_readMINMATCH(repMatch, minMatch)) ) {
                     repLen = (U32)ZSTD_count_2segments(ip+minMatch, repMatch+minMatch, iLimit, dictEnd, prefixStart) + minMatch;
                 }
                 if (dictMode == ZSTD_dictMatchState
                   && ( ((repOffset-1) /*intentional overflow*/ < curr - (dmsLowLimit + dmsIndexDelta))  /* equivalent to `curr > repIndex >= dmsLowLimit` */
-                     & ((U32)((dictLimit-1) - repIndex) >= 3) ) /* intentional overflow : do not test positions overlapping 2 memory segments */
+                     & (ZSTD_index_overlap_check(dictLimit, repIndex)) )
                   && (ZSTD_readMINMATCH(ip, minMatch) == ZSTD_readMINMATCH(repMatch, minMatch)) ) {
                     repLen = (U32)ZSTD_count_2segments(ip+minMatch, repMatch+minMatch, iLimit, dmsEnd, prefixStart) + minMatch;
             }   }
