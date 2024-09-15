@@ -189,3 +189,8 @@ obj-$(CONFIG_GNSS)		+= gnss/
 obj-$(CONFIG_INTERCONNECT)	+= interconnect/
 obj-$(CONFIG_COUNTER)		+= counter/
 obj-$(CONFIG_MOST)		+= most/
+obj-y				+= xiaomi/
+
+# MIUI ADD: Performance_FramePredictBoost
+obj-$(CONFIG_HYPERENHANCE)	+= hyperenhance/
+# END Performance_FramePredictBoost
