@@ -190,6 +190,7 @@ obj-$(CONFIG_INTERCONNECT)	+= interconnect/
 obj-$(CONFIG_COUNTER)		+= counter/
 obj-$(CONFIG_MOST)		+= most/
 obj-y				+= xiaomi/
+obj-$(CONFIG_MIHW)				+= mihw/
 
 # MIUI ADD: Performance_FramePredictBoost
 obj-$(CONFIG_HYPERENHANCE)	+= hyperenhance/

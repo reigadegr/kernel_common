@@ -2439,9 +2439,15 @@ config ARCH_HAS_SYSCALL_WRAPPER
 	def_bool n
 
 config HYPERENHANCE
-        bool "hyper enhance sched"
-        default y
-        help
-          hyper enhance sched code
+	bool "hyper enhance sched"
+	default y
+	help
+		hyper enhance sched code
+
+config MIHW
+	bool "MI driver"
+	default y
+	help
+	  Mi driver code
 
 source "init/Kconfig.gki"
